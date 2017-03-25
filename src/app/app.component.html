@@ -1,10 +1,81 @@
-<!--<div class="overlay">
-  <div class="sky"></div>
-  <div class="ground"></div>
-</div>
-<canvas id="glCanvas">
 
-</canvas>-->
+<h1>WebGL: 3D Programming for the Web</h1>
+
 <div #rendererContainer>
 
 </div>
+
+<div class="text">Let's create something fun!</div>
+
+<h3>Creating a Scene:</h3>
+<pre><code class="codelist">
+
+this.scene = new THREE.Scene();
+
+this.camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 10000);
+this.camera.position.z = 1000;
+
+</code></pre>
+
+<h3>Adding a cube:</h3>
+<pre><code class="codelist">
+this.createRubixMaterial();
+
+const geometry = new THREE.BoxGeometry(200, 200, 200);
+const material =  new THREE.MeshPhongMaterial( color: 0x0033ff );
+this.mesh = new THREE.Mesh(geometry, material);
+
+this.scene.add(this.mesh);
+</code></pre>
+
+<h3>Adding a texture:</h3>
+<pre><code class="codelist">
+const material =  new THREE.MeshPhongMaterial( map: THREE.ImageUtils.loadTexture('images/crate.jpg') );
+</code></pre>
+
+<img src="../assets/capture2.PNG">
+
+<div class="text">Let's add things... let's animate this cube so we can see it as a cube</div>
+
+<h3>Animation:</h3>
+<pre><code class="codelist">
+  animate() &#123;
+      window.requestAnimationFrame(() =&gt; this.animate());
+      this.mesh.rotation.x += 0.01;
+      this.mesh.rotation.y += 0.02;
+      this.renderer.render(this.scene, this.camera);
+&#125;
+</code></pre>
+
+<img src="../assets/capture4.gif">
+
+<div class="text">Finally, let's add unique sides</div>
+
+<h3>Texture Materials Array:</h3>
+<pre><code class="codelist">
+      this.createRubixMaterial();
+
+      const geometry = new THREE.BoxGeometry(200, 200, 200);
+      var meshFaceMaterial = new THREE.MeshFaceMaterial( this.materials );
+      this.mesh = new THREE.Mesh(geometry, meshFaceMaterial);
+
+      this.scene.add(this.mesh);
+
+  &#125;
+
+  createRubixMaterial() &#123;
+    var material1 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics1.jpg') &#125; );
+    var material2 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics2.jpg') &#125; );
+    var material3 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics3.jpg') &#125; );
+    var material4 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics4.jpg') &#125; );
+    var material5 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics5.jpg') &#125; );
+    var material6 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics6.jpg') &#125; );
+  
+    this.materials = [material1, material2, material3, material4, material5, material6];
+  &#125;
+</code></pre>
+
+<a href="https://github.com/alibaril/webgl">
+<div class="text">We should now have a complete, spinning rubix cube!</div>
+<div class="text-bottom">Full code available here</div>
+</a>
