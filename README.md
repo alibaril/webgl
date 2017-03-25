@@ -18,12 +18,14 @@ Comes in webpack in angular but can be install around the web if not included in
 # Adding three js library:
 
 add the library to your modules with:
-  npm install three --save
+  `npm install three --save`
 
-Add to typings:
- `npm install d3 --save
+In terminal, install and add to typings:
+ ```
+ npm install d3 --save
  npm install @types/d3 --save-dev
- npm install @types/three --save`
+ npm install @types/three --save
+```
 command in the console.
 
 `import * as THREE from 'three';`
@@ -32,4 +34,4 @@ into app.component.ts to use within app component
 
 # Tutorial
 
-(http://rubixwebgl.alissonbaril.com/)
+http://rubixwebgl.alissonbaril.com/
