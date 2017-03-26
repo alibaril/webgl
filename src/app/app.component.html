@@ -5,6 +5,37 @@
 
 </div>
 
+<h3>What is Web GL?</h3>
+<div class="text-block"><p>WebGL lets you easily and efficiently create graphics and animation that look and react great on various web platforms. With a Javascript abstraction
+  over OpenGL, WebGL is familiar and quick to learn for any web developer or OpenGL developer that has used either of those platforms. It's quick to learn, easy to use and
+  set up and creates amazing reactive graphics and scenes.</p></div>
+
+<h3>Why use Web GL?</h3>
+<div class="text-block"><p>Maybe for fun or to wow your friends or create something interesting for your site. WebGL offers many perks:</p></div>
+<ul>
+  <li>It's versatile. It's compatable with many frameworks - such as Angular 2, as seen by the quick example below.</li>
+  <li>It works on mobile and multiple browsers.</li>
+  <li>It works with Unity and other powerful graphics libraries</li>
+  <li>It has handfuls of supplemented libraries that make it even easier and more efficient. <a href="https://threejs.org/examples/webgl_materials_skin.html">Look at what you can do with three js</a></li>
+  <li>It's fast!</li>
+  <li>It simplifies a lot of hard graphics aspects! Such as shaders!</li>
+  <li>It makes programming in the 3D world easy</li>
+  <li>It can be interactive!</li>
+</ul>
+
+<h3>How to Learn?</h3>
+<div class="text-block"><p>WebGL has many online tutorials that are often very helpful and make using and setting up, implementing and deploying easy and fun. Here are a few resources:</p></div>
+<ul>
+  <li><a href="http://learningwebgl.com/blog/">LearningWebGL</a></li>
+  <li><a href="http://www.webglacademy.com/">WebGL Academy</a></li>
+  <li><a href="https://www.pluralsight.com/courses/webgl-threejs-fundamentals">Web GL and Three js Fundamentals Course</a></li>
+  <li><a href="https://aerotwist.com/tutorials/getting-started-with-three-js/">Aerotwist Tutorials</a></li>
+  <li><a href="http://learningthreejs.com/">WebGL for Dummies</a></li>
+  <li>Or even at the University of Manitoba, maybe?</li>
+</ul>
+
+<div class="text-block"><p>Here's a quick tutorial on how to make the above rubik's cube. It's neat and fast to make and it's cute and it's using Angular 2. WebGL is so modern and hipster, using all the new frameworks!</p></div>
+
 <div class="text">Let's create something fun!</div>
 
 <h3>Creating a Scene:</h3>
@@ -63,12 +94,12 @@ const material =  new THREE.MeshPhongMaterial( map: THREE.ImageUtils.loadTexture
   &#125;
 
   createRubixMaterial() &#123;
-    var material1 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics1.jpg') &#125; );
-    var material2 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics2.jpg') &#125; );
-    var material3 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics3.jpg') &#125; );
-    var material4 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics4.jpg') &#125; );
-    var material5 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics5.jpg') &#125; );
-    var material6 = new THREE.MeshPhongMaterial( &#125; map: THREE.ImageUtils.loadTexture('../assets/rubics6.jpg') &#125; );
+    var material1 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics1.jpg') &#125; );
+    var material2 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics2.jpg') &#125; );
+    var material3 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics3.jpg') &#125; );
+    var material4 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics4.jpg') &#125; );
+    var material5 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics5.jpg') &#125; );
+    var material6 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics6.jpg') &#125; );
   
     this.materials = [material1, material2, material3, material4, material5, material6];
   &#125;
@@ -76,5 +107,77 @@ const material =  new THREE.MeshPhongMaterial( map: THREE.ImageUtils.loadTexture
 
 <a href="https://github.com/alibaril/webgl">
 <div class="text">We should now have a complete, spinning rubix cube!</div>
-<div class="text-bottom">Full code available here</div>
+<div class="text-bottom">Our complete code should look something like this (the whole project code base available here): </div>
 </a>
+
+<h3>app.component.html:</h3>
+<pre><code class="codelist">
+  &lt;div #rendererContainer&gt;
+
+  &lt;/div&gt;
+</code></pre>
+
+<h3>app.component.ts:</h3>
+<pre><code class="codelist">
+import &#123; Component, ViewChild, ElementRef &#125; from '@angular/core';
+import * as THREE from 'three';
+
+@Component(&#123;
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+&#125;)
+export class AppComponent &#123;
+  @ViewChild('rendererContainer') rendererContainer: ElementRef;
+
+  renderer = new THREE.WebGLRenderer();
+  scene = null;
+  camera = null;
+  mesh = null;
+  materials = null;
+
+  constructor() &#123;
+      this.scene = new THREE.Scene();
+
+      this.camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 10000);
+      this.camera.position.z = 1000;
+
+      this.createRubixMaterial();
+
+      const geometry = new THREE.BoxGeometry(200, 200, 200);
+      var meshFaceMaterial = new THREE.MeshFaceMaterial( this.materials );
+      this.mesh = new THREE.Mesh(geometry, meshFaceMaterial);
+
+      this.scene.add(this.mesh);
+
+  &#125;
+
+  createRubixMaterial() &#123;
+    var material1 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics1.jpg') &#125; );
+    var material2 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics2.jpg') &#125; );
+    var material3 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics3.jpg') &#125; );
+    var material4 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics4.jpg') &#125; );
+    var material5 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics5.jpg') &#125; );
+    var material6 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics6.jpg') &#125; );
+  
+    this.materials = [material1, material2, material3, material4, material5, material6];
+  }
+
+  ngAfterViewInit() &#123;
+      this.renderer.setSize(600, 400);
+      this.renderer.domElement.style.display = "block";
+      this.renderer.domElement.style.margin = "auto";
+      this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
+
+      this.animate();
+  &#125;
+
+  animate() &#123;
+    window.requestAnimationFrame(() =&gt; this.animate());
+      this.mesh.rotation.x += 0.01;
+      this.mesh.rotation.y += 0.02;
+      this.renderer.render(this.scene, this.camera);
+  &#125;
+
+&#125;
+</code></pre>

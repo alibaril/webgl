@@ -3,4 +3,17 @@
 body {
     margin: auto;
     text-align: center;
+    font-size:14px;
+}
+
+@media screen and (min-width: 760px) {
+    body {
+        margin: auto 60px;
+    }
+}
+
+@media screen and (min-width: 1240px) {
+    body {
+        margin: auto 260px;
+    }
 }

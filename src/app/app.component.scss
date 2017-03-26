@@ -3,16 +3,37 @@
 h3 {
     text-align: left;
     padding: 10px;
+    font-size: 22px;
 }
 
 .text {
     display: block;
     margin-top: 40px;
+    font-size:18px;
 }
 
 .text-bottom {
     display: block;
     margin-bottom: 40px;
+    font-size:18px;
+}
+
+.text-block {
+    text-align: left;
+    font-size:18px;
+
+    p {
+        padding: 10px;
+    }
+}
+
+ul {
+    text-align: left;
+    font-size: 18px;
+
+    li {
+        padding-bottom: 5px;
+    }
 }
 
 #canvas {
