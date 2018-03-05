@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import {Component, ViewChild, ElementRef, OnInit, AfterViewInit} from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -6,7 +6,7 @@ import * as THREE from 'three';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('rendererContainer') rendererContainer: ElementRef;
 
   renderer = new THREE.WebGLRenderer();
@@ -16,43 +16,48 @@ export class AppComponent {
   materials = null;
 
   constructor() {
-      this.scene = new THREE.Scene();
 
-      this.camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 10000);
-      this.camera.position.z = 1000;
+  }
 
-      var light = new THREE.DirectionalLight( 0xffffff );
-      light.position.set( 0, 1, 1 ).normalize();
-      this.scene.add(light);
+  ngOnInit() {
 
-      var ambient = new THREE.AmbientLight ( 0x555555 );
-      this.scene.add(ambient);
+    this.scene = new THREE.Scene();
 
-      this.createRubixMaterial();
+    this.camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 10000);
+    this.camera.position.z = 1000;
 
-      const geometry = new THREE.BoxGeometry(200, 200, 200);
-      var meshFaceMaterial = new THREE.MeshFaceMaterial( this.materials );
-      this.mesh = new THREE.Mesh(geometry, meshFaceMaterial);
+    const light = new THREE.DirectionalLight( 0xffffff );
+    light.position.set( 0, 1, 1 ).normalize();
+    this.scene.add(light);
 
-      this.scene.add(this.mesh);
+    const ambient = new THREE.AmbientLight ( 0x555555 );
+    this.scene.add(ambient);
+
+    this.createRubixMaterial();
+
+    const geometry = new THREE.BoxGeometry(200, 200, 200);
+    const meshFaceMaterial = new THREE.MultiMaterial( this.materials );
+    this.mesh = new THREE.Mesh(geometry, meshFaceMaterial);
+
+    this.scene.add(this.mesh);
 
   }
 
   createRubixMaterial() {
-    var material1 = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('../assets/rubics1.jpg') } );
-    var material2 = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('../assets/rubics2.jpg') } );
-    var material3 = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('../assets/rubics3.jpg') } );
-    var material4 = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('../assets/rubics4.jpg') } );
-    var material5 = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('../assets/rubics5.jpg') } );
-    var material6 = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('../assets/rubics6.jpg') } );
-  
+    const material1 = new THREE.MeshPhongMaterial( { map: new THREE.TextureLoader().load('../assets/rubics1.jpg') } );
+    const material2 = new THREE.MeshPhongMaterial( { map: new THREE.TextureLoader().load('../assets/rubics2.jpg') } );
+    const material3 = new THREE.MeshPhongMaterial( { map: new THREE.TextureLoader().load('../assets/rubics3.jpg') } );
+    const material4 = new THREE.MeshPhongMaterial( { map: new THREE.TextureLoader().load('../assets/rubics4.jpg') } );
+    const material5 = new THREE.MeshPhongMaterial( { map: new THREE.TextureLoader().load('../assets/rubics5.jpg') } );
+    const material6 = new THREE.MeshPhongMaterial( { map: new THREE.TextureLoader().load('../assets/rubics6.jpg') } );
+
     this.materials = [material1, material2, material3, material4, material5, material6];
   }
 
   ngAfterViewInit() {
       this.renderer.setSize(600, 400);
-      this.renderer.domElement.style.display = "block";
-      this.renderer.domElement.style.margin = "auto";
+      this.renderer.domElement.style.display = 'block';
+      this.renderer.domElement.style.margin = 'auto';
       this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
       this.animate();

@@ -13,7 +13,7 @@
 <h3>Why use Web GL?</h3>
 <div class="text-block"><p>Maybe for fun or to wow your friends or create something interesting for your site. WebGL offers many perks:</p></div>
 <ul>
-  <li>It's versatile. It's compatable with many frameworks - such as Angular 2, as seen by the quick example below.</li>
+  <li>It's versatile. It's compatible with many frameworks - such as Angular 2, as seen by the quick example below.</li>
   <li>It works on mobile and multiple browsers.</li>
   <li>It works with Unity and other powerful graphics libraries</li>
   <li>It has handfuls of supplemented libraries that make it even easier and more efficient. <a href="https://threejs.org/examples/webgl_materials_skin.html">Look at what you can do with three js</a></li>
@@ -60,7 +60,7 @@ this.scene.add(this.mesh);
 
 <h3>Adding a texture:</h3>
 <pre><code class="codelist">
-const material =  new THREE.MeshPhongMaterial( map: THREE.ImageUtils.loadTexture('images/crate.jpg') );
+const material =  new THREE.MeshPhongMaterial( map: new THREE.TextureLoader().load('images/crate.jpg') );
 </code></pre>
 
 <img src="../assets/capture2.PNG">
@@ -86,7 +86,7 @@ const material =  new THREE.MeshPhongMaterial( map: THREE.ImageUtils.loadTexture
       this.createRubixMaterial();
 
       const geometry = new THREE.BoxGeometry(200, 200, 200);
-      var meshFaceMaterial = new THREE.MeshFaceMaterial( this.materials );
+      const meshFaceMaterial = new THREE.MultiMaterial( this.materials );
       this.mesh = new THREE.Mesh(geometry, meshFaceMaterial);
 
       this.scene.add(this.mesh);
@@ -94,13 +94,13 @@ const material =  new THREE.MeshPhongMaterial( map: THREE.ImageUtils.loadTexture
   &#125;
 
   createRubixMaterial() &#123;
-    var material1 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics1.jpg') &#125; );
-    var material2 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics2.jpg') &#125; );
-    var material3 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics3.jpg') &#125; );
-    var material4 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics4.jpg') &#125; );
-    var material5 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics5.jpg') &#125; );
-    var material6 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics6.jpg') &#125; );
-  
+    var material1 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics1.jpg') &#125; );
+    var material2 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics2.jpg') &#125; );
+    var material3 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics3.jpg') &#125; );
+    var material4 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics4.jpg') &#125; );
+    var material5 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics5.jpg') &#125; );
+    var material6 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics6.jpg') &#125; );
+
     this.materials = [material1, material2, material3, material4, material5, material6];
   &#125;
 </code></pre>
@@ -119,7 +119,7 @@ const material =  new THREE.MeshPhongMaterial( map: THREE.ImageUtils.loadTexture
 
 <h3>app.component.ts:</h3>
 <pre><code class="codelist">
-import &#123; Component, ViewChild, ElementRef &#125; from '@angular/core';
+import &#123; Component, ViewChild, ElementRef, OnInit, AfterViewInit  &#125; from '@angular/core';
 import * as THREE from 'three';
 
 @Component(&#123;
@@ -127,7 +127,7 @@ import * as THREE from 'three';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 &#125;)
-export class AppComponent &#123;
+export class AppComponent implements OnInit, AfterViewInit &#123;
   @ViewChild('rendererContainer') rendererContainer: ElementRef;
 
   renderer = new THREE.WebGLRenderer();
@@ -137,36 +137,48 @@ export class AppComponent &#123;
   materials = null;
 
   constructor() &#123;
-      this.scene = new THREE.Scene();
 
-      this.camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 10000);
-      this.camera.position.z = 1000;
+  &#125;
 
-      this.createRubixMaterial();
+  ngOnInit() &#123;
 
-      const geometry = new THREE.BoxGeometry(200, 200, 200);
-      var meshFaceMaterial = new THREE.MeshFaceMaterial( this.materials );
-      this.mesh = new THREE.Mesh(geometry, meshFaceMaterial);
+    this.scene = new THREE.Scene();
 
-      this.scene.add(this.mesh);
+    this.camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 10000);
+    this.camera.position.z = 1000;
+
+    const light = new THREE.DirectionalLight( 0xffffff );
+    light.position.set( 0, 1, 1 ).normalize();
+    this.scene.add(light);
+
+    const ambient = new THREE.AmbientLight ( 0x555555 );
+    this.scene.add(ambient);
+
+    this.createRubixMaterial();
+
+    const geometry = new THREE.BoxGeometry(200, 200, 200);
+    const meshFaceMaterial = new THREE.MultiMaterial( this.materials );
+    this.mesh = new THREE.Mesh(geometry, meshFaceMaterial);
+
+    this.scene.add(this.mesh);
 
   &#125;
 
   createRubixMaterial() &#123;
-    var material1 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics1.jpg') &#125; );
-    var material2 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics2.jpg') &#125; );
-    var material3 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics3.jpg') &#125; );
-    var material4 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics4.jpg') &#125; );
-    var material5 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics5.jpg') &#125; );
-    var material6 = new THREE.MeshPhongMaterial( &#123; map: THREE.ImageUtils.loadTexture('../assets/rubics6.jpg') &#125; );
-  
+    var material1 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics1.jpg') &#125; );
+    var material2 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics2.jpg') &#125; );
+    var material3 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics3.jpg') &#125; );
+    var material4 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics4.jpg') &#125; );
+    var material5 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics5.jpg') &#125; );
+    var material6 = new THREE.MeshPhongMaterial( &#123; map: new THREE.TextureLoader().load('../assets/rubics6.jpg') &#125; );
+
     this.materials = [material1, material2, material3, material4, material5, material6];
-  }
+  &#125;
 
   ngAfterViewInit() &#123;
       this.renderer.setSize(600, 400);
-      this.renderer.domElement.style.display = "block";
-      this.renderer.domElement.style.margin = "auto";
+      this.renderer.domElement.style.display = 'block';
+      this.renderer.domElement.style.margin = 'auto';
       this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
       this.animate();
